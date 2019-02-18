@@ -1,0 +1,39 @@
+version: '2'
+services:
+  db:
+    container_name: db
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/db:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: myDatabase
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
+  php:
+    container_name: php
+    image: php:7.1-fpm
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./www:/var/www/html
+      - ./www:/usr/share/nginx/html
+      - ./log/php:/var/log/php
+    links :
+      - db
+  nginx:
+    container_name: nginx
+    image: nginx:1.10
+    ports:
+      - "80:80"
+    volumes_from:
+      - php
+    volumes:
+      - ./log/nginx/:/var/log/nginx
+    links :
+      - db
+    depends_on: 
+      - db
+      - php
