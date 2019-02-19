@@ -2,24 +2,31 @@ version: '2'
 services:
   db:
     container_name: db
-    image: mysql:5.7
-    command: "--innodb_use_native_aio=0"
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
+    build: ./db
+    command: --init-file /data/application/init.sql
     volumes:
-        - ./data/:/var/lib/mysql
+        - ./data/mydb.sql:/data/application/init.sql
+    environment:
+        MYSQL_DATABASE: mydb
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_USER: test
+        MYSQL_PASSWORD: mdp
+
+    # volumes:
+    #      - ./data:/var/lib/mysql
+    # restart: always
     ports:
         - "3306:3306"
-  # web:
-  #   container_name: php_web
-  #   image: php:7.2.2-apache
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - ./www/:/var/www/html/
-  #   ports:
-  #     - "8080:80"
-  #   stdin_open: true
-  #   tty: true
+    expose:
+      - "3306"
+  web:
+    container_name: php_web
+    build: ./web_php/
+    depends_on:
+      - db
+    volumes:
+      - ./www/:/var/www/html/
+    ports:
+      - "8080:80"
+    stdin_open: true
+    tty: true

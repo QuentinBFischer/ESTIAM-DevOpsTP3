@@ -1,13 +1,18 @@
 <?php
-//@w3schools
-$servername = "192.168.99.100:3306";
+
+/*phpinfo();*/
+
 $username = "root";
-$password = "root";
+$password = "";
 $dbname = "mydb";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+/*$db = new PDO('mysql:host=db;dbname=mydb;charset=UTF-8', 
+              'root', 
+              '');
+*/
+$conn = mysqli_connect('192.168.99.100:3306', $username, $password, $database);
 
-if ($conn->connect_error) {
+if ($db->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
