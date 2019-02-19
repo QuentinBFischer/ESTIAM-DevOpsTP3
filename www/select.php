@@ -1,15 +1,6 @@
 <?php
 //@w3schools
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "mydb";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+include 'connect.php';
 
 $sql = "SELECT id, data1 FROM mydata";
 $result = $conn->query($sql);
